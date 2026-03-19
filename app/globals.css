@@ -1,75 +1,343 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-noir-950: #0a0a0a;
-  --color-noir-900: #0d0d0d;
-  --color-noir-800: #151015;
+  --color-noir-950: #050505;
+  --color-noir-900: #0a0a0a;
+  --color-noir-800: #121015;
   --color-noir-700: #1a1018;
-  --color-noir-600: #1e1520;
+  --color-noir-600: #221a28;
+  --color-noir-500: #2e2236;
   --color-lavender: #b48cc8;
+  --color-lavender-deep: #8a5fa0;
   --color-lavender-light: #e0d0ea;
+  --color-lavender-pale: #f0e8f5;
   --color-lavender-muted: rgba(180, 140, 200, 0.6);
   --color-lavender-glow: rgba(180, 140, 200, 0.15);
+  --color-lavender-faint: rgba(180, 140, 200, 0.08);
+  --color-gold: #c9a96e;
+  --color-gold-light: #e8d5a8;
+  --color-gold-muted: rgba(201, 169, 110, 0.4);
+  --color-gold-glow: rgba(201, 169, 110, 0.15);
   --font-serif: "Cormorant Garamond", Georgia, serif;
   --font-sans: "DM Sans", system-ui, sans-serif;
   --letter-spacing-dramatic: 0.3em;
   --letter-spacing-wide: 0.15em;
+  --letter-spacing-elegant: 0.08em;
 }
+
+/* ────────────── Base ────────────── */
 
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  background-color: var(--color-noir-900);
+  background-color: var(--color-noir-950);
   color: var(--color-lavender-light);
   font-family: var(--font-sans);
+  overflow-x: hidden;
 }
 
+/* ────────────── Film Grain Overlay ────────────── */
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+  animation: grain 0.5s steps(1) infinite;
+}
+
+/* ────────────── Selection ────────────── */
+
 ::selection {
-  background-color: rgba(180, 140, 200, 0.3);
+  background-color: rgba(180, 140, 200, 0.35);
   color: #fff;
 }
 
-::-webkit-scrollbar {
-  width: 6px;
+::-moz-selection {
+  background-color: rgba(180, 140, 200, 0.35);
+  color: #fff;
 }
+
+/* ────────────── Premium Scrollbar ────────────── */
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
 ::-webkit-scrollbar-track {
   background: var(--color-noir-950);
 }
+
 ::-webkit-scrollbar-thumb {
-  background: rgba(180, 140, 200, 0.3);
-  border-radius: 3px;
+  background: linear-gradient(
+    180deg,
+    var(--color-lavender-deep),
+    var(--color-gold),
+    var(--color-lavender-deep)
+  );
+  border-radius: 10px;
 }
 
-/* Skip to content */
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    var(--color-lavender),
+    var(--color-gold-light),
+    var(--color-lavender)
+  );
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-lavender-deep) var(--color-noir-950);
+}
+
+/* ────────────── Skip to Content ────────────── */
+
 .skip-to-content {
   position: absolute;
   top: -100%;
   left: 50%;
   transform: translateX(-50%);
   z-index: 200;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 1.5rem;
   background: var(--color-lavender);
-  color: var(--color-noir-900);
+  color: var(--color-noir-950);
   font-size: 0.875rem;
-  transition: top 0.2s;
+  font-weight: 500;
+  border-radius: 0 0 0.5rem 0.5rem;
+  transition: top 0.3s ease;
 }
+
 .skip-to-content:focus {
-  top: 0.5rem;
+  top: 0;
 }
 
-/* Hide cursor on desktop for custom cursor */
-@media (min-width: 1280px) and (pointer: fine) {
-  * { cursor: none !important; }
+/* ────────────── Keyframe Animations ────────────── */
+
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-5%, -10%); }
+  20% { transform: translate(-15%, 5%); }
+  30% { transform: translate(7%, -25%); }
+  40% { transform: translate(-5%, 25%); }
+  50% { transform: translate(-15%, 10%); }
+  60% { transform: translate(15%, 0%); }
+  70% { transform: translate(0%, 15%); }
+  80% { transform: translate(3%, 35%); }
+  90% { transform: translate(-10%, 10%); }
 }
 
-/* Reduced motion */
+@keyframes spotlight-sweep {
+  0% {
+    opacity: 0.04;
+    transform: translate(-10%, -5%) scale(1);
+  }
+  50% {
+    opacity: 0.1;
+    transform: translate(5%, 3%) scale(1.1);
+  }
+  100% {
+    opacity: 0.04;
+    transform: translate(-10%, -5%) scale(1);
+  }
+}
+
+@keyframes text-shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+@keyframes border-glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(180, 140, 200, 0.1),
+                0 0 15px rgba(180, 140, 200, 0.05);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(180, 140, 200, 0.2),
+                0 0 30px rgba(180, 140, 200, 0.1);
+  }
+}
+
+@keyframes parallax-float {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+  }
+  25% {
+    transform: translateY(-8px) translateX(3px);
+  }
+  50% {
+    transform: translateY(-4px) translateX(-2px);
+  }
+  75% {
+    transform: translateY(-12px) translateX(1px);
+  }
+}
+
+@keyframes radial-pulse {
+  0%, 100% {
+    opacity: 0.06;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.14;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes gold-shimmer {
+  0% {
+    background-position: -300% center;
+  }
+  100% {
+    background-position: 300% center;
+  }
+}
+
+@keyframes fade-up-in {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes line-draw {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes drift {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.6;
+  }
+  50% {
+    transform: translate(var(--drift-x, 20px), var(--drift-y, -40px)) scale(var(--drift-scale, 1.2));
+  }
+}
+
+@keyframes progress-fill {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@keyframes split-reveal-top {
+  from { transform: translateY(0); }
+  to { transform: translateY(-100%); }
+}
+
+@keyframes split-reveal-bottom {
+  from { transform: translateY(0); }
+  to { transform: translateY(100%); }
+}
+
+/* ────────────── Scroll Reveal ────────────── */
+
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal-on-scroll.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ────────────── Utility Classes ────────────── */
+
+.text-shimmer {
+  background: linear-gradient(
+    120deg,
+    var(--color-lavender-light) 0%,
+    var(--color-gold-light) 25%,
+    var(--color-lavender-light) 50%,
+    var(--color-gold-light) 75%,
+    var(--color-lavender-light) 100%
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: text-shimmer 4s linear infinite;
+}
+
+.text-gold-shimmer {
+  background: linear-gradient(
+    120deg,
+    var(--color-gold) 0%,
+    var(--color-gold-light) 30%,
+    #fff 50%,
+    var(--color-gold-light) 70%,
+    var(--color-gold) 100%
+  );
+  background-size: 300% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gold-shimmer 3s ease-in-out infinite;
+}
+
+.spotlight-pulse {
+  animation: radial-pulse 6s ease-in-out infinite;
+}
+
+.border-glow {
+  animation: border-glow-pulse 3s ease-in-out infinite;
+}
+
+.float-drift {
+  animation: parallax-float 8s ease-in-out infinite;
+}
+
+/* ────────────── Reduced Motion ────────────── */
+
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  body::after {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+
+  .text-shimmer,
+  .text-gold-shimmer {
+    animation: none !important;
+    background: none !important;
+    -webkit-text-fill-color: var(--color-lavender-light) !important;
   }
 }
